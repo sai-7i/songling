@@ -74,43 +74,43 @@
                     <text x="850" y="820" fill="#4a525d" font-size="42" font-family="'Songling Serif', serif" opacity="0.8">嵩山余脉</text>
                 </g>
 
-                <!-- 水系：伊洛河自西南向东北流经市区西北侧，在河洛镇汇入黄河（河洛汇流） -->
+                <!-- 水系：伊洛河自西南向东北流经市区西北侧，在河洛镇汇入黄河（河洛汇流），走向按实测坐标换算 -->
                 <g id="water-layer">
                     <path class="river river-yellow-bank" d="M -80 115 Q 170 45 390 110 T 800 90 T 1280 125" />
                     <path class="river river-yellow" d="M -80 115 Q 170 45 390 110 T 800 90 T 1280 125" />
                     <text x="980" y="95" class="river-name river-name-yellow">黄河</text>
-                    <path class="river river-main-bank" d="M -70 620 C 140 545, 300 480, 430 420 S 610 350 650 250 S 690 160 660 105" />
-                    <path class="river river-main" d="M -70 620 C 140 545, 300 480, 430 420 S 610 350 650 250 S 690 160 660 105" />
-                    <text x="505" y="432" class="river-name" transform="rotate(-33, 505, 432)">伊洛河</text>
+                    <path class="river river-main-bank" d="M 40 645 C 110 620, 160 605, 206 588 C 250 572, 285 548, 311 520 C 337 492, 362 468, 386 442 C 402 424, 418 390, 428 351 C 440 304, 462 268, 478 232 C 494 196, 520 130, 541 90" />
+                    <path class="river river-main" d="M 40 645 C 110 620, 160 605, 206 588 C 250 572, 285 548, 311 520 C 337 492, 362 468, 386 442 C 402 424, 418 390, 428 351 C 440 304, 462 268, 478 232 C 494 196, 520 130, 541 90" />
+                    <text x="345" y="488" class="river-name" transform="rotate(-46, 345, 488)">伊洛河</text>
                 </g>
 
-                <!-- 仿地图底图：道路、行政区示意与可跳转地标（方位按真实地理：康店西、河洛北、回郭西南、站街东北） -->
+                <!-- 仿地图底图：乡镇示意边界按实测坐标相对方位重排 -->
                 <g id="township-layer" aria-label="乡镇街道边界示意">
-                    <path class="township-boundary" d="M 470 70 L 800 60 L 870 160 L 720 240 L 480 225 Z" />
-                    <text class="township-label" x="655" y="150">河洛镇</text>
-                    <path class="township-boundary" d="M 60 220 L 330 210 L 395 360 L 300 470 L 75 455 Z" />
-                    <text class="township-label" x="190" y="340">康店镇</text>
-                    <path class="township-boundary" d="M 690 105 L 990 100 L 1120 280 L 900 380 L 690 260 Z" />
-                    <text class="township-label" x="860" y="245">站街镇</text>
-                    <path class="township-boundary" d="M 40 400 L 240 385 L 310 470 L 255 565 L 50 545 Z" />
-                    <text class="township-label" x="155" y="475">回郭镇</text>
-                    <path class="township-boundary" d="M 565 365 L 820 345 L 915 495 L 760 610 L 590 535 Z" />
-                    <text class="township-label" x="700" y="455">孝义街道</text>
-                    <path class="township-boundary" d="M 375 335 L 565 365 L 590 535 L 445 625 L 295 470 Z" />
-                    <text class="township-label" x="430" y="595">芝田镇</text>
-                    <path class="township-boundary" d="M 180 590 L 390 560 L 510 655 L 450 800 L 200 800 Z" />
-                    <text class="township-label" x="330" y="705">西村镇</text>
-                    <path class="township-boundary" d="M 445 625 L 590 535 L 760 610 L 700 830 L 470 840 L 315 800 Z" />
-                    <text class="township-label" x="525" y="735">涉村镇</text>
+                    <path class="township-boundary" d="M 505 85 L 810 70 L 870 165 L 705 265 L 500 245 Z" />
+                    <text class="township-label" x="665" y="155">河洛镇</text>
+                    <path class="township-boundary" d="M 225 275 L 425 278 L 455 380 L 360 455 L 215 420 Z" />
+                    <text class="township-label" x="325" y="360">康店镇</text>
+                    <path class="township-boundary" d="M 700 115 L 955 115 L 1005 260 L 850 345 L 690 262 Z" />
+                    <text class="township-label" x="845" y="230">站街镇</text>
+                    <path class="township-boundary" d="M 40 545 L 225 522 L 295 600 L 242 682 L 50 660 Z" />
+                    <text class="township-label" x="140" y="598">回郭镇</text>
+                    <path class="township-boundary" d="M 445 330 L 705 318 L 745 420 L 640 492 L 450 470 Z" />
+                    <text class="township-label" x="595" y="398">孝义街道</text>
+                    <path class="township-boundary" d="M 380 478 L 560 458 L 622 560 L 562 645 L 400 622 Z" />
+                    <text class="township-label" x="492" y="560">芝田镇</text>
+                    <path class="township-boundary" d="M 125 640 L 330 610 L 482 660 L 505 745 L 350 805 L 145 772 Z" />
+                    <text class="township-label" x="298" y="712">西村镇</text>
+                    <path class="township-boundary" d="M 525 680 L 745 655 L 805 780 L 600 860 L 480 792 Z" />
+                    <text class="township-label" x="632" y="752">涉村镇</text>
                     <path class="township-boundary" d="M 760 610 L 965 610 L 1160 690 L 1070 860 L 700 830 Z" />
                     <text class="township-label" x="900" y="755">小关镇</text>
-                    <text class="township-caption" x="620" y="330">巩义中心城区</text>
+                    <text class="township-caption" x="600" y="352">巩义中心城区</text>
                 </g>
 
                 <g id="road-layer" aria-label="道路">
                     <!-- 主干道路：低饱和细线，避免压住陵寝和地标 -->
                     <path class="map-road road-expressway" d="M -20 155 C 225 105 430 155 630 150 S 945 125 1230 165" />
-                    <path class="map-road road-primary" d="M 35 455 C 210 422 358 432 515 470 S 850 500 1180 455" />
+                    <path class="map-road road-primary" d="M 35 540 C 210 505, 358 498, 515 470 S 850 420, 1180 428" />
                     <path class="map-road road-primary" d="M 650 80 C 610 220 590 330 610 470 S 650 700 720 870" />
                     <path class="map-road road-secondary" d="M 118 720 C 260 640 350 570 470 520 S 700 360 980 280" />
                     <path class="map-road road-secondary" d="M 210 180 C 320 250 400 340 470 520 S 540 700 560 850" />
@@ -130,61 +130,60 @@
                     <path class="map-road road-local" d="M 60 530 L 160 510 L 260 520" />
                     <path class="map-road road-local" d="M 960 405 L 1050 455 L 1140 470" />
 
-                    <path class="road-label" d="M 135 425 L 305 425" />
-                    <path class="road-label" d="M 470 332 L 600 382" />
-                    <path class="road-label" d="M 650 572 L 780 548" />
+                    <path class="road-label" d="M 135 512 L 305 505" />
+                    <path class="road-label" d="M 495 378 L 615 425" />
+                    <path class="road-label" d="M 545 486 L 675 462" />
                     <path class="road-label" d="M 810 156 L 960 148" />
-                    <text class="road-name" x="198" y="414">G310 连天线</text>
+                    <text class="road-name" x="198" y="500">G310 连天线</text>
                     <text class="road-name" x="840" y="140">G30 连霍高速</text>
-                    <text class="road-name" x="485" y="325" transform="rotate(18 485 325)">宋陵路</text>
-                    <text class="road-name" x="700" y="560" transform="rotate(-8 700 560)">杜甫路</text>
-                    <text class="road-name" x="550" y="640" transform="rotate(78 550 640)">建设路</text>
+                    <text class="road-name" x="505" y="368" transform="rotate(20 505 368)">宋陵路</text>
+                    <text class="road-name" x="585" y="478" transform="rotate(-8 585 478)">杜甫路</text>
+                    <text class="road-name" x="635" y="415" transform="rotate(78 635 415)">建设路</text>
                     <text class="road-name" x="875" y="330" transform="rotate(-18 875 330)">人民路</text>
                     <text class="road-name" x="675" y="190" transform="rotate(78 675 190)">焦桐高速</text>
                 </g>
 
-                <g id="landmark-layer" aria-label="周边地标">
-                    <g class="landmark landmark-city" data-amap-keyword="巩义市人民政府" transform="translate(610 398)">
+                <g id="landmark-layer" aria-label="周边地标（坐标按 OSM 实测经纬度投影换算）">
+                    <g class="landmark landmark-city" data-amap-keyword="巩义市人民政府" transform="translate(629 401)">
                         <circle r="22" class="landmark-halo" />
                         <circle r="7" class="landmark-dot" />
                         <text x="0" y="-30" class="landmark-name">巩义市区</text>
                     </g>
-                    <g class="landmark landmark-featured" data-amap-keyword="宋陵公园" transform="translate(520 308)">
+                    <g class="landmark landmark-featured" data-amap-keyword="宋陵公园" transform="translate(478 388)">
                         <path class="landmark-icon" d="M -12 8 L 0 -10 L 12 8 M -8 8 V 14 H 8 V 8" />
                         <text x="17" y="5" class="landmark-name">宋陵公园</text>
                     </g>
-                    <g class="landmark landmark-featured" data-amap-keyword="北宋皇陵博物馆" transform="translate(570 268)">
-                        <rect x="-9" y="-9" width="18" height="18" rx="2" class="landmark-icon" />
-                        <path class="landmark-icon-cut" d="M -5 0 H 5 M 0 -5 V 5" />
-                        <text x="16" y="5" class="landmark-name">北宋皇陵博物馆</text>
-                    </g>
-                    <g class="landmark" data-amap-keyword="巩义市博物馆" transform="translate(660 330)">
+                    <g class="landmark" data-amap-keyword="巩义市博物馆" transform="translate(510 445)">
                         <rect x="-8" y="-8" width="16" height="16" class="landmark-icon" />
                         <path class="landmark-icon-cut" d="M -4 0 H 4 M 0 -4 V 4" />
                         <text x="15" y="5" class="landmark-name">巩义市博物馆</text>
                     </g>
-                    <g class="landmark" data-amap-keyword="巩义站" transform="translate(745 408)">
+                    <g class="landmark" data-amap-keyword="巩义站" transform="translate(458 361)">
                         <path class="landmark-icon" d="M -9 7 L 0 -8 L 9 7 Z M -6 7 V 12 H 6 V 7" />
                         <text x="15" y="5" class="landmark-name">巩义站</text>
                     </g>
-                    <g class="landmark" data-amap-keyword="康百万庄园" transform="translate(300 350)">
+                    <g class="landmark" data-amap-keyword="康百万庄园" transform="translate(335 354)">
                         <path class="landmark-icon" d="M -10 8 Q 0 -10 10 8 M -7 8 V 13 M 0 8 V 13 M 7 8 V 13" />
                         <text x="15" y="5" class="landmark-name">康百万庄园</text>
                     </g>
-                    <g class="landmark" data-amap-keyword="杜甫故里" transform="translate(835 315)">
+                    <g class="landmark" data-amap-keyword="杜甫故里" transform="translate(777 239)">
                         <circle r="10" class="landmark-ring" />
                         <path class="landmark-icon" d="M -5 3 Q 0 -7 5 3 Q 0 8 -5 3" />
                         <text x="18" y="5" class="landmark-name">杜甫故里</text>
                     </g>
-                    <g class="landmark" data-amap-keyword="巩县石窟" transform="translate(605 165)">
+                    <g class="landmark" data-amap-keyword="巩县石窟" transform="translate(659 190)">
                         <path class="landmark-icon" d="M -10 8 V -4 L 0 -11 L 10 -4 V 8 M -5 8 V 13 M 0 8 V 13 M 5 8 V 13" />
                         <text x="15" y="5" class="landmark-name">巩县石窟</text>
                     </g>
-                    <g class="landmark" data-amap-keyword="永昭陵" transform="translate(462 300)">
+                    <g class="landmark" data-amap-keyword="永昭陵" transform="translate(445 300)">
                         <path class="landmark-icon" d="M 0 -11 L 8 -3 L 4 10 L -4 10 L -8 -3 Z" />
                         <text x="14" y="5" class="landmark-name">宋陵石刻</text>
                     </g>
-                    <g class="landmark" data-amap-keyword="寇准墓 巩义" transform="translate(565 525)">
+                    <g class="landmark" data-amap-keyword="包拯墓 巩义" transform="translate(413 528)">
+                        <path class="landmark-icon" d="M -10 8 L 0 -9 L 10 8 M -6 8 V 13 H 6 V 8" />
+                        <text x="14" y="5" class="landmark-name">包拯墓</text>
+                    </g>
+                    <g class="landmark" data-amap-keyword="寇准墓 巩义" transform="translate(428 582)">
                         <path class="landmark-icon" d="M -10 8 L 0 -9 L 10 8 M -6 8 V 13 H 6 V 8" />
                         <text x="14" y="5" class="landmark-name">寇准墓</text>
                     </g>
@@ -194,23 +193,23 @@
                     </g>
                 </g>
 
-                <!-- 陵区区块划分：边界围合对应的陵寝标记 -->
+                <!-- 陵区区块划分：边界围合对应的陵寝标记（中心按实测坐标） -->
                 <g id="zone-layer" opacity="0.62" aria-label="宋陵陵区边界">
                     <!-- 市区陵区：永昭陵、永厚陵 -->
-                    <polygon class="tomb-zone" points="425,260 505,245 575,295 555,390 470,405 410,345" />
-                    <text class="zone-name" x="495" y="285">市区陵区</text>
+                    <polygon class="tomb-zone" points="405,372 485,360 545,390 540,452 478,468 412,430" />
+                    <text class="zone-name" x="525" y="378">市区陵区</text>
 
-                    <!-- 蔡庄陵区：永定陵（市区西南、芝田镇境内） -->
-                    <polygon class="tomb-zone" points="450,415 525,400 595,435 595,520 520,550 450,500" />
-                    <text class="zone-name" x="508" y="440">蔡庄陵区</text>
+                    <!-- 蔡庄陵区：永定陵（芝田镇蔡庄） -->
+                    <polygon class="tomb-zone" points="415,518 490,508 540,540 535,595 468,615 412,582" />
+                    <text class="zone-name" x="497" y="530">蔡庄陵区</text>
 
                     <!-- 西村陵区：永昌陵、永熙陵、永安陵 -->
-                    <polygon class="tomb-zone" points="300,505 385,495 465,520 480,600 420,645 335,625 285,565" />
-                    <text class="zone-name" x="380" y="532">西村陵区</text>
+                    <polygon class="tomb-zone" points="285,628 380,618 460,650 468,718 400,748 320,722 278,672" />
+                    <text class="zone-name" x="358" y="642">西村陵区</text>
 
                     <!-- 八陵陵区：永裕陵、永泰陵 -->
-                    <polygon class="tomb-zone" points="165,595 260,575 355,610 390,700 325,760 215,745 150,680" />
-                    <text class="zone-name" x="265" y="620">八陵陵区</text>
+                    <polygon class="tomb-zone" points="115,690 215,678 295,705 305,768 228,795 128,768 92,728" />
+                    <text class="zone-name" x="200" y="700">八陵陵区</text>
                 </g>
 
                 <!-- 交互标记层 (由JS渲染) -->
