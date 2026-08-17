@@ -1,0 +1,1149 @@
+/* css/style.css - Stone Inscription Theme */
+
+@font-face {
+    font-family: "Songling Serif";
+    src: url("../assets/fonts/songling-serif-regular.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Songling Serif";
+    src: url("../assets/fonts/songling-serif-bold.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Songling Calligraphy";
+    src: url("../assets/fonts/songling-calligraphy.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+:root {
+    /* 核心调色板：深渊黑 + 佛光金 */
+    --color-bg-deep: #050608;
+    --color-bg-panel: rgba(15, 17, 20, 0.85);
+    
+    --color-gold-bright: #e5c07b;
+    --color-gold-main: #c99c52;
+    --color-gold-dark: #8c774f;
+    --color-gold-muted: rgba(201, 156, 82, 0.2);
+    
+    --color-text-primary: #d9d0c1;
+    --color-text-secondary: #8c8374;
+    
+    --color-border: rgba(201, 156, 82, 0.3);
+    
+    --font-serif: "Songling Serif", serif;
+    --font-cursive: "Songling Calligraphy", cursive;
+    --font-sans: "Songling Serif", -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+    --map-road-primary: #9b6b3a;
+    --map-road-secondary: #806249;
+    --map-road-local: #5d5a55;
+    --map-landmark: #93c7bb;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+button,
+.hud-btn,
+.map-marker,
+.list-item {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+body {
+    background-color: var(--color-bg-deep);
+    color: var(--color-text-primary);
+    font-family: var(--font-serif);
+    min-height: 100vh;
+    min-height: 100dvh;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    overscroll-behavior: none;
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+/* JS 将动态控制屏幕显隐，CSS中的 hidden 只是辅助 */
+.hidden {
+    display: none !important;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   雾气粒子效果 (背景层)
+   ========================================================================== */
+.fog-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    /* 置于地图(10)/序章(100)之上、详情弹窗(200)之下，烟雾才真正可见 */
+    z-index: 150;
+    overflow: hidden;
+    opacity: 0.34;
+}
+
+.fog-img {
+    position: absolute;
+    width: 160vw;
+    height: 120dvh;
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(201, 156, 82, 0.13), transparent 42%),
+        radial-gradient(ellipse at 72% 42%, rgba(80, 102, 100, 0.15), transparent 45%);
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+}
+
+.fog-img-1 {
+    animation: drift 45s linear infinite;
+}
+
+.fog-img-2 {
+    animation: drift 58s linear infinite reverse;
+    opacity: 0.6;
+    top: -12vh;
+}
+
+@keyframes drift {
+    0% { transform: translate3d(-8%, 0, 0); }
+    100% { transform: translate3d(-30%, 4%, 0); }
+}
+
+/* ==========================================================================
+   全屏容器与通用组件
+   ========================================================================== */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 电影级按钮 */
+.btn-cinematic {
+    display: inline-block;
+    text-decoration: none;
+    background: transparent;
+    border: 1px solid var(--color-gold-main);
+    color: var(--color-gold-bright);
+    padding: 16px 48px;
+    font-family: var(--font-serif);
+    font-size: 20px;
+    letter-spacing: 8px;
+    text-indent: 8px; /* 补偿 letter-spacing 导致的居中偏移 */
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+    box-shadow: inset 0 0 10px var(--color-gold-muted);
+}
+
+.btn-cinematic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(201,156,82,0.4), transparent);
+    transition: left 0.6s ease;
+}
+
+.btn-cinematic:hover {
+    background: rgba(201, 156, 82, 0.1);
+    box-shadow: inset 0 0 20px var(--color-gold-muted), 0 0 15px var(--color-gold-muted);
+    text-shadow: 0 0 10px var(--color-gold-bright);
+}
+
+.btn-cinematic:hover::before {
+    left: 100%;
+}
+
+.btn-cinematic.outline {
+    font-size: 16px;
+    padding: 12px 32px;
+    letter-spacing: 4px;
+    text-indent: 4px;
+}
+
+/* ==========================================================================
+   序章页 (Intro)
+   ========================================================================== */
+#intro-screen {
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, #15181c 0%, #000000 100%);
+    z-index: 100;
+}
+
+.intro-content {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 40px;
+}
+
+.seal-mark {
+    font-family: var(--font-cursive);
+    color: #8b2b2b; /* 印泥红 */
+    font-size: 48px;
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.8;
+    mix-blend-mode: multiply;
+    text-shadow: 0 0 10px rgba(139,43,43,0.5);
+}
+
+.title-main {
+    font-size: 72px;
+    font-weight: 900;
+    color: var(--color-gold-bright);
+    letter-spacing: 16px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 30px rgba(201, 156, 82, 0.5);
+}
+
+.title-sub {
+    font-size: 20px;
+    color: var(--color-text-secondary);
+    letter-spacing: 6px;
+    margin-bottom: 50px;
+    font-weight: normal;
+}
+
+.intro-text {
+    font-size: 16px;
+    line-height: 2.2;
+    color: var(--color-text-primary);
+    margin-bottom: 60px;
+    text-align: center;
+    opacity: 0.8;
+}
+
+
+/* ==========================================================================
+   地图页 UI (HUD)
+   ========================================================================== */
+.hud-header {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.hud-title {
+    font-family: var(--font-cursive);
+    font-size: 42px;
+    color: var(--color-gold-bright);
+    letter-spacing: 4px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+}
+
+.hud-subtitle {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin-top: 5px;
+    letter-spacing: 2px;
+}
+
+/* 控制按钮 (左下角) */
+.hud-controls {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 20;
+}
+
+.hud-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(10, 12, 15, 0.7);
+    border: 1px solid var(--color-gold-dark);
+    color: var(--color-gold-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.hud-btn:hover {
+    background: var(--color-gold-muted);
+    color: var(--color-gold-bright);
+    border-color: var(--color-gold-bright);
+    box-shadow: 0 0 15px rgba(201, 156, 82, 0.3);
+}
+
+/* ==========================================================================
+   地图容器 & SVG
+   ========================================================================== */
+.map-container {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    touch-action: none;
+    overscroll-behavior: contain;
+}
+
+.map-container:active {
+    cursor: grabbing;
+}
+
+#game-map {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: #14191d;
+    contain: layout paint;
+}
+
+/* 道路与地标图层 */
+.map-road {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+}
+
+.road-expressway {
+    stroke: #705b75;
+    stroke-width: 4;
+    opacity: 0.68;
+    stroke-dasharray: 14 7;
+}
+
+.road-primary {
+    stroke: var(--map-road-primary);
+    stroke-width: 6;
+    opacity: 0.62;
+}
+
+.road-secondary {
+    stroke: var(--map-road-secondary);
+    stroke-width: 4;
+    opacity: 0.64;
+}
+
+.road-local {
+    stroke: var(--map-road-local);
+    stroke-width: 2;
+    opacity: 0.78;
+}
+
+.road-label {
+    fill: none;
+    stroke: rgba(226, 180, 117, 0.3);
+    stroke-width: 0.8;
+    stroke-dasharray: 2 6;
+}
+
+.road-name {
+    fill: rgba(226, 180, 117, 0.84);
+    font-family: var(--font-sans);
+    font-size: 11px;
+    letter-spacing: 1px;
+    pointer-events: none;
+}
+
+.river {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+}
+
+.river-main-bank {
+    stroke: #18333d;
+    stroke-width: 28;
+}
+
+.river-main {
+    stroke: #2e6878;
+    stroke-width: 8;
+    opacity: 0.86;
+}
+
+.river-yellow-bank {
+    stroke: #263640;
+    stroke-width: 22;
+}
+
+.river-yellow {
+    stroke: #4d7480;
+    stroke-width: 6;
+    opacity: 0.74;
+}
+
+.river-branch {
+    stroke: #315d6a;
+    stroke-width: 4;
+    opacity: 0.78;
+}
+
+.river-name {
+    fill: #67a8b9;
+    font-family: var(--font-serif);
+    font-size: 22px;
+    letter-spacing: 7px;
+    paint-order: stroke;
+    stroke: rgba(10, 18, 22, 0.85);
+    stroke-width: 4px;
+}
+
+.river-name-yellow {
+    fill: #8baeb5;
+    font-size: 18px;
+}
+
+.river-name-small {
+    font-size: 13px;
+    letter-spacing: 3px;
+}
+
+.township-boundary {
+    fill: rgba(101, 115, 123, 0.035);
+    stroke: rgba(123, 151, 153, 0.4);
+    stroke-width: 1;
+    stroke-dasharray: 5 7;
+    pointer-events: none;
+}
+
+.township-label,
+.township-caption {
+    fill: rgba(173, 194, 188, 0.7);
+    font-family: var(--font-serif);
+    font-size: 16px;
+    letter-spacing: 2px;
+    text-anchor: middle;
+    pointer-events: none;
+}
+
+.township-caption {
+    fill: rgba(220, 184, 112, 0.56);
+    font-size: 13px;
+    letter-spacing: 3px;
+}
+
+.landmark {
+    color: var(--map-landmark);
+    cursor: pointer;
+    pointer-events: all;
+    touch-action: manipulation;
+}
+
+.landmark:focus {
+    outline: none;
+}
+
+.landmark:focus .landmark-icon,
+.landmark:focus .landmark-ring,
+.landmark:hover .landmark-icon,
+.landmark:hover .landmark-ring {
+    stroke: #fff1ba;
+}
+
+.landmark:focus .landmark-name,
+.landmark:hover .landmark-name {
+    fill: #fff1ba;
+}
+
+.landmark-icon,
+.landmark-ring,
+.landmark-dot {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+}
+
+.landmark-dot {
+    fill: currentColor;
+    stroke: none;
+}
+
+.landmark-halo {
+    fill: rgba(147, 199, 187, 0.16);
+    stroke: rgba(147, 199, 187, 0.5);
+    stroke-width: 1;
+}
+
+.landmark-icon-cut {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+}
+
+.landmark-name {
+    fill: rgba(218, 235, 227, 0.96);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    paint-order: stroke;
+    stroke: rgba(12, 17, 20, 0.9);
+    stroke-width: 4px;
+    stroke-linejoin: round;
+    pointer-events: none;
+}
+
+.landmark-featured {
+    color: #d8b56e;
+}
+
+.landmark-featured .landmark-name {
+    fill: #f0d69b;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.map-legend {
+    position: absolute;
+    /* 避开左下角缩放/重置按钮列 (44px 宽 + 间距) */
+    left: 120px;
+    bottom: 36px;
+    z-index: 21;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 14px;
+    color: rgba(217, 208, 193, 0.78);
+    background: rgba(8, 11, 13, 0.72);
+    border: 1px solid rgba(201, 156, 82, 0.22);
+    font: 12px var(--font-sans);
+}
+
+.map-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.legend-swatch {
+    display: inline-block;
+    width: 16px;
+    height: 3px;
+}
+
+.legend-tomb {
+    width: 9px;
+    height: 9px;
+    transform: rotate(45deg);
+    background: var(--color-gold-main);
+}
+
+.legend-road { background: var(--map-road-primary); }
+.legend-landmark { background: var(--map-landmark); }
+
+.map-action-hint {
+    color: var(--color-gold-bright);
+    font-weight: 700;
+}
+
+.map-scale {
+    margin-left: 8px;
+    padding-left: 14px;
+    border-left: 1px solid rgba(255,255,255,0.12);
+    color: var(--color-text-secondary);
+}
+
+/* 标记点样式 */
+.map-marker {
+    cursor: pointer;
+    pointer-events: all;
+}
+
+.marker-base {
+    fill: rgba(0,0,0,0.6);
+    stroke: var(--color-gold-dark);
+    stroke-width: 1;
+    transition: fill 0.2s ease, stroke 0.2s ease, stroke-width 0.2s ease;
+}
+
+.marker-core {
+    fill: var(--color-gold-main);
+    transition: fill 0.2s ease, stroke 0.2s ease, stroke-width 0.2s ease;
+}
+
+.marker-text {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    fill: var(--color-text-primary);
+    text-anchor: middle;
+    pointer-events: none;
+    paint-order: stroke;
+    stroke: rgba(5, 6, 8, 0.9);
+    stroke-width: 3px;
+    stroke-linejoin: round;
+    transition: fill 0.2s ease, font-size 0.2s ease;
+}
+
+/* 交互状态 */
+.map-marker:hover .marker-base {
+    stroke: var(--color-gold-bright);
+}
+.map-marker:hover .marker-core {
+    fill: var(--color-gold-bright);
+}
+.map-marker:hover .marker-text {
+    fill: var(--color-gold-bright);
+}
+
+.map-marker.active .marker-base {
+    stroke: var(--color-gold-bright);
+    stroke-width: 2;
+}
+.map-marker.active .marker-core {
+    fill: #fff;
+}
+.map-marker.active .marker-text {
+    fill: #fff;
+    font-size: 16px;
+    text-shadow: 0 0 10px var(--color-gold-bright);
+}
+
+
+/* ==========================================================================
+   右侧图鉴列表 (HUD)
+   ========================================================================== */
+.side-panel {
+    position: absolute;
+    right: 40px;
+    top: 30px;
+    bottom: 40px;
+    width: 340px;
+    background: linear-gradient(to left, rgba(10,12,15,0.95), rgba(10,12,15,0.7));
+    border-right: 2px solid var(--color-gold-dark);
+    border-top: 1px solid rgba(201, 156, 82, 0.2);
+    border-bottom: 1px solid rgba(201, 156, 82, 0.2);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    /* 右侧面板特效：左边缘有微弱金光 */
+    box-shadow: inset 1px 0 0 rgba(201, 156, 82, 0.3), 10px 0 30px rgba(0,0,0,0.8);
+    /* 面板默认永远可见，任何动画都不会影响可见性 (GSAP 只做位移滑动) */
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+}
+
+.panel-header {
+    padding: 24px 30px;
+    border-bottom: 1px solid rgba(201, 156, 82, 0.15);
+}
+
+.panel-header h3 {
+    color: var(--color-gold-bright);
+    font-size: 18px;
+    letter-spacing: 4px;
+}
+
+.scroll-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 0;
+}
+
+/* 隐藏滚动条但保留功能 */
+.scroll-list::-webkit-scrollbar { width: 4px; }
+.scroll-list::-webkit-scrollbar-track { background: transparent; }
+.scroll-list::-webkit-scrollbar-thumb { background: var(--color-gold-dark); border-radius: 2px;}
+
+.list-item {
+    padding: 20px 30px;
+    cursor: pointer;
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    transition: background-color 0.2s ease;
+    position: relative;
+}
+
+.list-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background: var(--color-gold-bright);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+    transform-origin: center;
+}
+
+.list-item:hover {
+    background: rgba(201, 156, 82, 0.05);
+}
+
+.list-item.active {
+    background: linear-gradient(90deg, rgba(201, 156, 82, 0.15), transparent);
+}
+
+.list-item.active::before {
+    transform: scaleY(1);
+    box-shadow: 0 0 10px var(--color-gold-bright);
+}
+
+.item-name {
+    display: block;
+    font-size: 18px;
+    color: var(--color-text-primary);
+    margin-bottom: 6px;
+    letter-spacing: 2px;
+}
+
+.list-item.active .item-name {
+    color: var(--color-gold-bright);
+}
+
+.item-meta {
+    display: block;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+/* ==========================================================================
+   详情图鉴面板 (全屏沉浸阅读)
+   ========================================================================== */
+.detail-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 200;
+    padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+}
+
+.detail-content {
+    width: 90%;
+    max-width: 1200px;
+    height: 85vh;
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-gold-dark);
+    box-shadow: 0 0 50px rgba(0,0,0,1), inset 0 0 30px rgba(201,156,82,0.1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 角落装饰线 */
+.detail-content::before, .detail-content::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: 2px solid var(--color-gold-main);
+    pointer-events: none;
+}
+.detail-content::before {
+    top: -2px; left: -2px;
+    border-right: none; border-bottom: none;
+}
+.detail-content::after {
+    bottom: -2px; right: -2px;
+    border-left: none; border-top: none;
+}
+
+.btn-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    font-size: 40px;
+    font-weight: 300;
+    cursor: pointer;
+    line-height: 1;
+    z-index: 10;
+    transition: color 0.2s;
+}
+
+.btn-close:hover {
+    color: var(--color-gold-bright);
+}
+
+.detail-layout {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+}
+
+.detail-left {
+    flex: 1;
+    border-right: 1px solid rgba(255,255,255,0.05);
+    background: #000;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-gallery {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    background: #0a0c10;
+}
+
+.gallery-stage {
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.gallery-stage::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(5, 6, 8, 0), rgba(5, 6, 8, 0.12));
+}
+
+.gallery-stage picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.gallery-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    filter: brightness(1.12) contrast(1.04) saturate(1.06);
+}
+
+.gallery-controls {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(5, 6, 8, 0.9);
+    border-top: 1px solid rgba(201, 156, 82, 0.18);
+}
+
+.gallery-control {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 6px 12px;
+    border: 1px solid rgba(201, 156, 82, 0.35);
+    background: transparent;
+    color: var(--color-text-secondary);
+    font: 13px var(--font-sans);
+    cursor: pointer;
+}
+
+.gallery-control.active,
+.gallery-control:hover {
+    color: var(--color-bg-deep);
+    background: var(--color-gold-bright);
+    border-color: var(--color-gold-bright);
+}
+
+.detail-right {
+    flex: 1;
+    padding: 60px 50px;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, rgba(20,22,26,1) 0%, rgba(10,12,15,1) 100%);
+}
+
+.detail-title {
+    font-family: var(--font-cursive);
+    font-size: 56px;
+    color: var(--color-gold-bright);
+    margin-bottom: 20px;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.detail-meta {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.meta-tag {
+    font-size: 12px;
+    padding: 6px 12px;
+    border: 1px solid var(--color-text-secondary);
+    color: var(--color-text-primary);
+    border-radius: 2px;
+    letter-spacing: 1px;
+}
+
+.meta-tag.gold {
+    border-color: var(--color-gold-dark);
+    color: var(--color-gold-main);
+}
+
+.detail-text-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 20px;
+    margin-bottom: 40px;
+}
+
+/* 滚动条 */
+.detail-text-scroll::-webkit-scrollbar { width: 4px; }
+.detail-text-scroll::-webkit-scrollbar-thumb { background: var(--color-gold-dark); }
+
+#detail-desc {
+    font-size: 16px;
+    line-height: 2.2;
+    color: var(--color-text-primary);
+    text-align: justify;
+    white-space: pre-line;
+}
+
+.detail-actions {
+    margin-top: auto;
+}
+
+/* ==========================================================================
+   响应式调整 (Mobile Fallback)
+   ========================================================================== */
+@media (max-width: 1024px) {
+    .side-panel {
+        width: 280px;
+        right: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .title-main { font-size: 42px; letter-spacing: 6px; }
+    
+    .hud-header {
+        top: max(16px, env(safe-area-inset-top));
+        left: max(16px, env(safe-area-inset-left));
+        max-width: calc(100vw - 180px);
+    }
+
+    .hud-title {
+        font-size: clamp(21px, 6.2vw, 28px);
+        letter-spacing: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .hud-subtitle {
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .map-legend {
+        left: max(16px, env(safe-area-inset-left));
+        bottom: calc(228px + env(safe-area-inset-bottom));
+        max-width: calc(100vw - 32px);
+        overflow-x: auto;
+        gap: 10px;
+        padding: 9px 12px;
+        scrollbar-width: none;
+    }
+
+    .map-legend::-webkit-scrollbar { display: none; }
+    .map-action-hint { display: none !important; }
+
+    .map-scale { display: none !important; }
+    
+    .side-panel {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        top: auto;
+        width: 100%;
+        height: auto;
+        padding-bottom: calc(12px + env(safe-area-inset-bottom));
+        border-right: none;
+        border-top: 2px solid var(--color-gold-dark);
+        /* 在手机端去除内阴影使其更清爽 */
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.8);
+        background: linear-gradient(to top, rgba(10,12,15,1), rgba(10,12,15,0.85)); /* 改为上下渐变 */
+        /* 重置可能被 PC 端样式影响的 transform 偏移 */
+        transform: none;
+    }
+    
+    /* 手机端列表横向滚动 */
+    .scroll-list {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 0 10px;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        overscroll-behavior-x: contain;
+    }
+    
+    .list-item {
+        flex: 0 0 160px;
+        border-bottom: none;
+        border-right: 1px solid rgba(255,255,255,0.05);
+        min-height: 106px;
+        padding: 14px;
+        scroll-snap-align: start;
+    }
+    
+    .list-item::before {
+        width: 100%;
+        height: 3px;
+        top: auto;
+        bottom: 0;
+        transform: scaleX(0);
+        transform-origin: center;
+    }
+    
+    .list-item.active::before {
+        transform: scaleX(1);
+    }
+
+    .hud-controls {
+        /* 控制按钮移到顶部右侧，避免和底部列表冲突 */
+        bottom: auto;
+        top: 20px;
+        left: auto;
+        right: max(16px, env(safe-area-inset-right));
+        flex-direction: row;
+        gap: 8px;
+    }
+    
+    .hud-btn {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .detail-overlay {
+        align-items: flex-start;
+        padding-top: max(12px, env(safe-area-inset-top));
+    }
+    
+    .detail-content {
+        width: 100%;
+        height: calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    }
+    .detail-layout {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+    .detail-left {
+        flex: none;
+        height: min(34dvh, 260px);
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .detail-right {
+        padding: 30px 20px;
+    }
+    .detail-title { font-size: 36px; }
+    .detail-text-scroll { overflow-y: visible; margin-bottom: 20px; }
+    
+    .btn-close {
+        top: 10px;
+        right: 10px;
+        background: rgba(0,0,0,0.5);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+
+@media (hover: none), (max-width: 768px) {
+    .fog-container {
+        opacity: 0.18;
+    }
+
+    .fog-img-2 {
+        display: none;
+    }
+
+    .side-panel,
+    .map-legend,
+    .detail-overlay {
+        backdrop-filter: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .fog-container {
+        display: none;
+    }
+}
+
+/* 宋陵分区：边界轻量化，标记和道路优先可读 */
+.tomb-zone {
+    fill: rgba(201, 156, 82, 0.035);
+    stroke: rgba(229, 192, 123, 0.76);
+    stroke-width: 1.5;
+    stroke-dasharray: 6 5;
+    vector-effect: non-scaling-stroke;
+    pointer-events: none;
+}
+
+.zone-name {
+    fill: rgba(229, 192, 123, 0.92);
+    font-family: var(--font-serif);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    paint-order: stroke;
+    stroke: rgba(7, 9, 11, 0.9);
+    stroke-width: 4px;
+    pointer-events: none;
+}
